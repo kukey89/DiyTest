@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">DiyTest</string>
+    <string name="rb_main">首页</string>
+    <string name="rb_me">我</string>
+    <string name="rb_fun">理财</string>
 </resources>

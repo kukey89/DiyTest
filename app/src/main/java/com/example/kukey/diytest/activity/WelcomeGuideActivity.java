@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -60,6 +61,7 @@ public class WelcomeGuideActivity extends Activity  {
 		viewPage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
+				Log.i( TAG,"position--"+ position);
 				monitorPoint(position);
 			}
 
@@ -69,7 +71,7 @@ public class WelcomeGuideActivity extends Activity  {
 
 			@Override
 			public void onPageScrollStateChanged(int arg0) {
-				Log.i( TAG,"arg0--"+ arg0);
+
 			}
 		});
 
@@ -89,7 +91,7 @@ public class WelcomeGuideActivity extends Activity  {
 		list = new ArrayList<View>();
 		// 将imageview添加到view
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 		for (int i = 0; i < imageView.length; i++) {
 			ImageView iv = new ImageView(this);
 			iv.setLayoutParams(params);
@@ -117,12 +119,12 @@ public class WelcomeGuideActivity extends Activity  {
 			}
 			ImageView iv = new ImageView(this);
 			iv.setLayoutParams(pointParams);
-//			iv.setBackgroundResource(R.mipmap.point_normal);
-			iv.setBackgroundColor(getResources().getColor(R.color.white));
+			iv.setBackgroundResource(R.mipmap.point_normal);
+//			iv.setBackgroundColor(getResources().getColor(R.color.white));
 			llPoint.addView(iv);
 		}
-//		llPoint.getChildAt(0).setBackgroundResource(R.mipmap.point_select);
-		llPoint.getChildAt(0).setBackgroundColor(getResources().getColor(R.color.red));
+		llPoint.getChildAt(0).setBackgroundResource(R.mipmap.point_select);
+//		llPoint.getChildAt(0).setBackgroundColor(getResources().getColor(R.color.red));
 
 	}
 
@@ -134,9 +136,11 @@ public class WelcomeGuideActivity extends Activity  {
 	private void monitorPoint(int position) {
 		for (int i = 0; i < imageView.length; i++) {
 			if (i == position) {
-				llPoint.getChildAt(position).setBackgroundColor(getResources().getColor(R.color.red));
+				llPoint.getChildAt(i).setBackgroundResource(R.mipmap.point_select);
+//				llPoint.getChildAt(position).setBackgroundColor(getResources().getColor(R.color.red));
 			} else {
-				llPoint.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.white));
+				llPoint.getChildAt(i).setBackgroundResource(R.mipmap.point_normal);
+//				llPoint.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.white));
 			}
 		}
 		// 3.当滑动到最后一个添加按钮点击进入，
