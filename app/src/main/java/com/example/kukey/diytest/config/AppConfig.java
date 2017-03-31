@@ -36,14 +36,8 @@ public class AppConfig {
 
     private SharedPreferences preferences;
 
-    /**
-     * 是否是测试环墄1�7.
-     */
     public static final boolean DEBUG = true;
 
-    /**
-     * App根目彄1�7.
-     */
     public String APP_PATH_ROOT;
 
     private AppConfig() {

@@ -1,5 +1,16 @@
 apply plugin: 'com.android.application'
 
+//定义时间
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+}
+
+//设置发布的显示的版本号
+def getVersionName(){
+    return "1.2.0"
+}
+
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -11,12 +22,59 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+
+    signingConfigs {
         release {
+            storeFile file(MYAPP_RELEASE_STORE_FILE)
+            storePassword MYAPP_RELEASE_STORE_PASSWORD
+            keyAlias MYAPP_RELEASE_KEY_ALIAS
+            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+        }
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField("boolean","API_DEBUG","true")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        release {
+            buildConfigField("boolean","API_DEBUG","false")
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    //修改打包不能成功配置
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+//配置自定义打包名称
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            def fileName
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                if (variant.buildType.name.equals('release')) {
+                    variant.mergedFlavor.versionName = getVersionName()
+                    fileName = "XXXX_${variant.mergedFlavor.versionName}_release.apk"
+                } else if (variant.buildType.name.equals('debug')) {
+                    variant.mergedFlavor.versionName = getVersionName()+"."+releaseTime()
+                    fileName = "XXXX_${variant.mergedFlavor.versionName}_debug.apk"
+                }
+                output.outputFile = new File(outputFile.parent, fileName)
+            }
+        }
+    }
+
+
 }
 
 dependencies {
@@ -27,4 +85,17 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
+    compile 'io.reactivex:rxjava:1.1.10'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.squareup.okio:okio:1.10.0'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
 }

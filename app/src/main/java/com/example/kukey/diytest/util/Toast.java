@@ -15,7 +15,8 @@
  */
 package com.example.kukey.diytest.util;
 
-import com.example.diyviewgett.Application;
+
+import com.example.kukey.diytest.Application;
 
 /**
  * @author EX-CHENWEIBIN001
